@@ -19,6 +19,8 @@ def extraer(datos, biblioteca):
         "low": minimo,
         "volume": volumen,
 
+        "volumen20": biblioteca["volumen20"],
+
         "ema9": ema9,
         "ema20": ema20,
 
@@ -28,7 +30,7 @@ def extraer(datos, biblioteca):
         "green_day": cierre > apertura,
 
         "body_percent":
-            abs(cierre-apertura)/(maximo-minimo)
+            abs(cierre - apertura) / (maximo - minimo)
             if maximo != minimo else 0
 
     }
