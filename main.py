@@ -18,13 +18,23 @@ def main():
 
         print(f"\nAnalizando {ticker}")
 
-        datos = descargar_diario(ticker)
+        try:
 
-        biblioteca = construir(datos)
+            datos = descargar_diario(ticker)
 
-        print("EMA9:", round(biblioteca["ema9"][0],2))
-        print("EMA20:", round(biblioteca["ema20"][0],2))
-        print("Volumen20:", round(biblioteca["volumen20"]))
+            biblioteca = construir(datos)
+
+            print("EMA9:", round(biblioteca["ema9"][0], 2))
+            print("EMA20:", round(biblioteca["ema20"][0], 2))
+            print("Volumen20:", round(biblioteca["volumen20"]))
+
+        except Exception as e:
+
+            print(f"⚠️ {ticker} no se ha podido descargar")
+            print(e)
+
+    print("\nFin del análisis.")
+
 
 if __name__ == "__main__":
     main()
