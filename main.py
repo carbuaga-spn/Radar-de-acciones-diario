@@ -2,8 +2,8 @@ from engine.collector import descargar_diario
 from libraries.historical_library import construir
 from engine.features import extraer
 from engine.scorer import calcular_score
+from engine.ranking import seleccionar_mejores
 from radars.close_radar import mostrar
-
 from config.universe import cargar_universo
 
 
@@ -14,9 +14,9 @@ def main():
     tickers = cargar_universo()
 
     print()
-    print("==============================")
+    print("================================")
     print("AEGIS MVP")
-    print("==============================")
+    print("================================")
     print()
 
     for ticker in tickers:
@@ -46,8 +46,9 @@ def main():
         except Exception as e:
 
             print("ERROR", ticker)
-
             print(e)
+
+    ranking = seleccionar_mejores(ranking)
 
     mostrar(ranking)
 
