@@ -1,16 +1,19 @@
 import os
 import requests
 
-API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
+API_KEY = os.getenv("TWELVE_DATA_API_KEY")
+
+BASE_URL = "https://api.twelvedata.com"
 
 
 def descargar_diario(symbol):
 
     url = (
-        "https://www.alphavantage.co/query"
-        "?function=TIME_SERIES_DAILY_ADJUSTED"
-        f"&symbol={symbol}"
-        "&outputsize=full"
+        f"{BASE_URL}/time_series"
+        f"?symbol={symbol}"
+        "&interval=1day"
+        "&outputsize=5000"
+        "&format=JSON"
         f"&apikey={API_KEY}"
     )
 
@@ -18,7 +21,7 @@ def descargar_diario(symbol):
 
     data = r.json()
 
-    if "Time Series (Daily)" not in data:
+    if "values" not in data:
         raise Exception(data)
 
-    return data["Time Series (Daily)"]
+    return data["values"]
