@@ -1,12 +1,24 @@
-    from scorer import score
+    def mostrar(ranking):
 
-def radar(sessions):
+    print("\n")
+    print("========================================")
+    print("        RADAR CIERRE AEGIS")
+    print("========================================")
+    print()
 
-    ranked = [score(s) for s in sessions]
-
-    ranked.sort(
-        key=lambda x: x.action_score,
+    ranking.sort(
+        key=lambda x: x["score"],
         reverse=True
     )
 
-    return ranked
+    for i, accion in enumerate(ranking, start=1):
+
+        print(f"{i}. {accion['ticker']}")
+        print(f"Score: {accion['score']}")
+
+        print("Motivos:")
+
+        for motivo in accion["motivos"]:
+            print("   •", motivo)
+
+        print("----------------------------------------")
