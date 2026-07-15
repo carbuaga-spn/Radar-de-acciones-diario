@@ -1,6 +1,6 @@
-    def mostrar(ranking):
+def mostrar(ranking):
 
-    print("\n")
+    print()
     print("========================================")
     print("        RADAR CIERRE AEGIS")
     print("========================================")
