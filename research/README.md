@@ -1,1 +1,1 @@
-    research/README.md
+    research/HYPOTHESES.md
