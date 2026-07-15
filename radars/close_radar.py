@@ -1,12 +1,12 @@
     from scorer import score
 
-def radar(lista):
+def radar(sessions):
 
-    sesiones = [score(s) for s in lista]
+    ranked = [score(s) for s in sessions]
 
-    sesiones.sort(
+    ranked.sort(
         key=lambda x: x.action_score,
         reverse=True
     )
 
-    return sesiones
+    return ranked
