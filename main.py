@@ -1,7 +1,9 @@
-from engine.collector import descargar_diario
+
+        from engine.collector import descargar_diario
 from libraries.historical_library import construir
 from engine.features import extraer
 from engine.scorer import calcular_score
+from radars.close_radar import mostrar
 
 TICKERS = [
     "NVDA",
@@ -16,9 +18,9 @@ def main():
 
     ranking = []
 
-    print("\n==============================")
-    print("AEGIS MVP - Radar Diario")
-    print("==============================\n")
+    print("\n================================")
+    print("AEGIS MVP")
+    print("================================\n")
 
     for ticker in TICKERS:
 
@@ -35,36 +37,22 @@ def main():
             resultado = calcular_score(caracteristicas)
 
             ranking.append({
+
                 "ticker": ticker,
+
                 "score": resultado["score"],
+
                 "motivos": resultado["motivos"]
+
             })
 
         except Exception as e:
 
             print(f"ERROR en {ticker}")
+
             print(e)
 
-    ranking.sort(
-        key=lambda x: x["score"],
-        reverse=True
-    )
-
-    print("\n==============================")
-    print("RANKING AEGIS")
-    print("==============================\n")
-
-    for accion in ranking:
-
-        print(
-            f'{accion["ticker"]}   '
-            f'{accion["score"]} puntos'
-        )
-
-        for motivo in accion["motivos"]:
-            print("   •", motivo)
-
-        print()
+    mostrar(ranking)
 
 
 if __name__ == "__main__":
