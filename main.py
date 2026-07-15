@@ -67,4 +67,4 @@ for i, s in enumerate(ranking, start=1):
         for w in s.warnings:
             print(f"      - {w}")
 
-    print().py
+    print()
