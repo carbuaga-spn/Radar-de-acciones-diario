@@ -1,4 +1,5 @@
 from engine.collector import descargar_diario
+from storage.save_json import guardar_json
 
 TICKERS = [
     "NVDA",
@@ -8,13 +9,32 @@ TICKERS = [
     "TSM"
 ]
 
-print("=== Descargando históricos ===")
 
-for ticker in TICKERS:
-    try:
-        datos = descargar_diario(ticker)
-        print(f"{ticker}: {len(datos)} sesiones descargadas")
-    except Exception as e:
-        print(f"{ticker}: ERROR -> {e}")
+def main():
 
-print("Proceso terminado.")
+    print("======================================")
+    print("AEGIS - Biblioteca Histórica")
+    print("======================================")
+
+    for ticker in TICKERS:
+
+        print(f"\nDescargando {ticker}...")
+
+        try:
+
+            datos = descargar_diario(ticker)
+
+            guardar_json(ticker, datos)
+
+            print(f"OK - {ticker}: {len(datos)} sesiones guardadas")
+
+        except Exception as e:
+
+            print(f"ERROR - {ticker}")
+            print(e)
+
+    print("\nProceso terminado.")
+
+
+if __name__ == "__main__":
+    main()
