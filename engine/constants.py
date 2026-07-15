@@ -1,1 +1,5 @@
-constants.py
+PATTERN = 0.30
+SECTOR = 0.25
+FLOW = 0.20
+MARKET = 0.15
+RISK = 0.10
