@@ -1,42 +1,35 @@
-from models import Session
-from constants import *
+def calcular_score(c):
 
-def score(session: Session):
+    score = 0
+    motivos = []
 
-    session.action_score = (
-        session.pattern_score * PATTERN_WEIGHT +
-        session.sector_score * SECTOR_WEIGHT +
-        session.flow_score * FLOW_WEIGHT +
-        session.market_score * MARKET_WEIGHT +
-        session.risk_score * RISK_WEIGHT
-    )
+    if c["above_ema20"]:
+        score += 20
+        motivos.append("Sobre EMA20 (+20)")
 
-    if session.action_score >= GRADE_A_PLUS:
-        session.grade = "A+"
-    elif session.action_score >= GRADE_A:
-        session.grade = "A"
-    elif session.action_score >= GRADE_B_PLUS:
-        session.grade = "B+"
-    elif session.action_score >= GRADE_B:
-        session.grade = "B"
-    else:
-        session.grade = "C"
+    if c["above_ema9"]:
+        score += 15
+        motivos.append("Sobre EMA9 (+15)")
 
-    # Evidencias
-    if session.pattern_score >= 90:
-        session.evidences.append("Patrón técnico excelente")
+    if c["green_day"]:
+        score += 10
+        motivos.append("Vela verde (+10)")
 
-    if session.sector_score >= 85:
-        session.evidences.append("Sector líder")
+    if c["body_percent"] > 0.60:
+        score += 15
+        motivos.append("Cuerpo fuerte (+15)")
 
-    if session.flow_score >= 85:
-        session.evidences.append("Flujo comprador fuerte")
+    volumen_relativo = c["volume"] / c["volumen20"]
 
-    # Riesgos
-    if session.market_score < 60:
-        session.warnings.append("Mercado débil")
+    if volumen_relativo > 1.5:
+        score += 20
+        motivos.append("Volumen muy alto (+20)")
 
-    if session.risk_score < 60:
-        session.warnings.append("Riesgo elevado")
+    elif volumen_relativo > 1.2:
+        score += 10
+        motivos.append("Volumen alto (+10)")
 
-    return session
+    return {
+        "score": score,
+        "motivos": motivos
+    }
