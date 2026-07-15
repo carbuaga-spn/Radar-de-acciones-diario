@@ -1,1 +1,5 @@
-docs/README.md
+docs/ARCHITECTURE.md
+docs/DATA_MODEL.md
+docs/FEATURE_CATALOG.md
+docs/SCORING_MODEL.md
+docs/CHANGELOG.md
