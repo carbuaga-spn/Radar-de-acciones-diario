@@ -1,5 +1,6 @@
 from engine.collector import descargar_diario
 from libraries.historical_library import construir
+from engine.features import extraer
 
 TICKERS = [
     "NVDA",
@@ -12,11 +13,13 @@ TICKERS = [
 
 def main():
 
-    print("\nAEGIS\n")
+    print("\n==========================")
+    print("AEGIS - Motor de Análisis")
+    print("==========================\n")
 
     for ticker in TICKERS:
 
-        print(f"\nAnalizando {ticker}")
+        print(f"Analizando {ticker}")
 
         try:
 
@@ -24,16 +27,19 @@ def main():
 
             biblioteca = construir(datos)
 
-            print("EMA9:", round(biblioteca["ema9"][0], 2))
-            print("EMA20:", round(biblioteca["ema20"][0], 2))
-            print("Volumen20:", round(biblioteca["volumen20"]))
+            caracteristicas = extraer(datos, biblioteca)
+
+            print(caracteristicas)
+
+            print("----------------------------------")
 
         except Exception as e:
 
-            print(f"⚠️ {ticker} no se ha podido descargar")
+            print(f"ERROR en {ticker}")
+
             print(e)
 
-    print("\nFin del análisis.")
+            print("----------------------------------")
 
 
 if __name__ == "__main__":
