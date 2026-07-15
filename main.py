@@ -1,5 +1,5 @@
 from engine.collector import descargar_diario
-from storage.save_json import guardar_json
+from libraries.historical_library import construir
 
 TICKERS = [
     "NVDA",
@@ -12,29 +12,19 @@ TICKERS = [
 
 def main():
 
-    print("======================================")
-    print("AEGIS - Biblioteca Histórica")
-    print("======================================")
+    print("\nAEGIS\n")
 
     for ticker in TICKERS:
 
-        print(f"\nDescargando {ticker}...")
+        print(f"\nAnalizando {ticker}")
 
-        try:
+        datos = descargar_diario(ticker)
 
-            datos = descargar_diario(ticker)
+        biblioteca = construir(datos)
 
-            guardar_json(ticker, datos)
-
-            print(f"OK - {ticker}: {len(datos)} sesiones guardadas")
-
-        except Exception as e:
-
-            print(f"ERROR - {ticker}")
-            print(e)
-
-    print("\nProceso terminado.")
-
+        print("EMA9:", round(biblioteca["ema9"][0],2))
+        print("EMA20:", round(biblioteca["ema20"][0],2))
+        print("Volumen20:", round(biblioteca["volumen20"]))
 
 if __name__ == "__main__":
     main()
