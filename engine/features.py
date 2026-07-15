@@ -1,47 +1,34 @@
-from engine.models import Session
+def extraer(datos, biblioteca):
 
-def calculate_features(session: Session):
+    ultimo = datos[0]
 
-    # Pattern Score
-    pattern = 50
+    cierre = float(ultimo["close"])
+    apertura = float(ultimo["open"])
+    maximo = float(ultimo["high"])
+    minimo = float(ultimo["low"])
+    volumen = float(ultimo["volume"])
 
-    if session.close >= session.ema9:
-        pattern += 10
+    ema9 = biblioteca["ema9"][0]
+    ema20 = biblioteca["ema20"][0]
 
-    if session.close >= session.vwap:
-        pattern += 10
+    return {
 
-    if session.last10_volume_ratio >= 2:
-        pattern += 15
+        "close": cierre,
+        "open": apertura,
+        "high": maximo,
+        "low": minimo,
+        "volume": volumen,
 
-    if session.close_position >= 0.90:
-        pattern += 15
+        "ema9": ema9,
+        "ema20": ema20,
 
-    session.pattern_score = min(pattern, 100)
+        "above_ema9": cierre > ema9,
+        "above_ema20": cierre > ema20,
 
-    # Sector
-    session.sector_score = session.sector_strength
+        "green_day": cierre > apertura,
 
-    # Market
-    session.market_score = session.market_strength
+        "body_percent":
+            abs(cierre-apertura)/(maximo-minimo)
+            if maximo != minimo else 0
 
-    # Flow
-    flow = 50
-
-    if session.last10_volume_ratio >= 3:
-        flow += 25
-
-    if session.last5_volume_ratio >= 2:
-        flow += 15
-
-    session.flow_score = min(flow, 100)
-
-    # Risk
-    risk = 80
-
-    if session.atr > 5:
-        risk -= 15
-
-    session.risk_score = max(risk, 0)
-
-    return session
+    }
