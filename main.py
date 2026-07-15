@@ -4,26 +4,24 @@ from engine.features import extraer
 from engine.scorer import calcular_score
 from radars.close_radar import mostrar
 
-TICKERS = [
-    "NVDA",
-    "AMD",
-    "AVGO",
-    "MRVL",
-    "TSM"
-]
+from config.universe import cargar_universo
 
 
 def main():
 
     ranking = []
 
-    print("\n================================")
+    tickers = cargar_universo()
+
+    print()
+    print("==============================")
     print("AEGIS MVP")
-    print("================================\n")
+    print("==============================")
+    print()
 
-    for ticker in TICKERS:
+    for ticker in tickers:
 
-        print(f"Analizando {ticker}")
+        print("Analizando", ticker)
 
         try:
 
@@ -47,7 +45,7 @@ def main():
 
         except Exception as e:
 
-            print(f"ERROR en {ticker}")
+            print("ERROR", ticker)
 
             print(e)
 
@@ -55,4 +53,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
