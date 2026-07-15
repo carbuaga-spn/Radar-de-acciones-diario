@@ -1,0 +1,16 @@
+{
+    "close": {
+        "min_score": 40,
+        "top": 10
+    },
+
+    "entry": {
+        "min_score": 50,
+        "top": 10
+    },
+
+    "rebound": {
+        "min_score": 45,
+        "top": 10
+    }
+}
