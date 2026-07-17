@@ -3,10 +3,13 @@ from libraries.historical_library import construir
 from engine.features import extraer
 from engine.scorer import calcular_score
 from engine.ranking import seleccionar_mejores
+
 from engine.sector_rotation import (
     obtener_sector,
     calcular_scores_sector
 )
+
+from engine.institutional_flow import calcular_flujo
 
 
 def ejecutar_radar(tickers, radar):
@@ -51,17 +54,15 @@ def ejecutar_radar(tickers, radar):
 
     # =====================================
     # FASE 2
-    # Analizar sectores
+    # Calcular fuerza sectorial
     # =====================================
 
     scores_sector = calcular_scores_sector(acciones)
 
     # =====================================
     # FASE 3
-    # Score final
+    # Calcular flujo institucional
     # =====================================
-
-    ranking = []
 
     for accion in acciones:
 
@@ -77,6 +78,23 @@ def ejecutar_radar(tickers, radar):
 
         caracteristicas["sector_score"] = info_sector["score"]
 
+        flujo = calcular_flujo(caracteristicas)
+
+        caracteristicas["institutional_flow"] = flujo["score"]
+
+        caracteristicas["institutional_reasons"] = flujo["motivos"]
+
+    # =====================================
+    # FASE 4
+    # Score final
+    # =====================================
+
+    ranking = []
+
+    for accion in acciones:
+
+        caracteristicas = accion["caracteristicas"]
+
         resultado = calcular_score(caracteristicas)
 
         ranking.append({
@@ -87,7 +105,11 @@ def ejecutar_radar(tickers, radar):
 
             "score": resultado["score"],
 
-            "motivos": resultado["motivos"]
+            "motivos": resultado["motivos"],
+
+            "institutional_flow": caracteristicas["institutional_flow"],
+
+            "institutional_reasons": caracteristicas["institutional_reasons"]
 
         })
 
