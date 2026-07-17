@@ -13,16 +13,31 @@ def extraer(datos, biblioteca):
 
     rango = maximo - minimo
 
+    body = abs(cierre - apertura)
+
     body_percent = (
-        abs(cierre - apertura) / rango
-        if rango != 0 else 0
+        body / rango
+        if rango > 0 else 0
     )
 
     volumen20 = biblioteca["volumen20"]
 
-    volumen_relativo = (
+    relative_volume = (
         volumen / volumen20
         if volumen20 > 0 else 0
+    )
+
+    upper_wick = (
+        maximo - max(cierre, apertura)
+    )
+
+    lower_wick = (
+        min(cierre, apertura) - minimo
+    )
+
+    close_position = (
+        (cierre - minimo) / rango
+        if rango > 0 else 0
     )
 
     return {
@@ -57,24 +72,53 @@ def extraer(datos, biblioteca):
         # ==========================
 
         "green_day": cierre > apertura,
+
+        "range": rango,
+
+        "body": body,
+
         "body_percent": body_percent,
+
+        "upper_wick": upper_wick,
+
+        "lower_wick": lower_wick,
+
+        "close_position": close_position,
 
         # ==========================
         # VOLUMEN
         # ==========================
 
-        "relative_volume": volumen_relativo,
+        "relative_volume": relative_volume,
 
         # ==========================
         # CAMPOS RESERVADOS V2
         # ==========================
 
         "sector": None,
+
         "sector_score": 0,
+
         "sector_strength": 0,
+
         "relative_strength": 0,
+
         "institutional_flow": 0,
+
         "last_hour_volume": 0,
-        "last_hour_strength": 0
+
+        "last_hour_strength": 0,
+
+        # ==========================
+        # CAMPOS FUTUROS
+        # ==========================
+
+        "market_strength": 0,
+
+        "news_score": 0,
+
+        "breakout_score": 0,
+
+        "momentum_score": 0
 
     }
