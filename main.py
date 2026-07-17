@@ -7,7 +7,7 @@ from radars.close_radar import mostrar
 
 from engine.sector_rotation import (
     obtener_sector,
-    score_sector
+    calcular_scores_sector
 )
 
 from config.universe import cargar_universo
@@ -28,7 +28,7 @@ def main():
 
     # =====================================
     # FASE 1
-    # Extraer información de todas las acciones
+    # Analizar todas las acciones
     # =====================================
 
     acciones = []
@@ -52,9 +52,7 @@ def main():
             acciones.append({
 
                 "ticker": ticker,
-
                 "sector": sector,
-
                 "caracteristicas": caracteristicas
 
             })
@@ -66,7 +64,14 @@ def main():
 
     # =====================================
     # FASE 2
-    # Calcular scores
+    # Calcular la fuerza de los sectores
+    # =====================================
+
+    scores_sector = calcular_scores_sector(acciones)
+
+    # =====================================
+    # FASE 3
+    # Calcular el ranking final
     # =====================================
 
     ranking = []
@@ -75,8 +80,9 @@ def main():
 
         caracteristicas = accion["caracteristicas"]
 
-        caracteristicas["sector_score"] = score_sector(
-            accion["sector"]
+        caracteristicas["sector_score"] = scores_sector.get(
+            accion["sector"],
+            0
         )
 
         resultado = calcular_score(caracteristicas)
@@ -84,11 +90,8 @@ def main():
         ranking.append({
 
             "ticker": accion["ticker"],
-
             "sector": accion["sector"],
-
             "score": resultado["score"],
-
             "motivos": resultado["motivos"]
 
         })
