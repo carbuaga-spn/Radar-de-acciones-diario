@@ -5,6 +5,11 @@ from engine.scorer import calcular_score
 from engine.ranking import seleccionar_mejores
 from radars.close_radar import mostrar
 
+from engine.sector_rotation import (
+    obtener_sector,
+    score_sector
+)
+
 from config.universe import cargar_universo
 from config.radars import cargar_radar
 
@@ -19,7 +24,7 @@ def main():
 
     print()
     print("===================================")
-    print("AEGIS V1")
+    print("AEGIS V2")
     print("Radar Cierre")
     print("===================================")
     print()
@@ -36,11 +41,24 @@ def main():
 
             caracteristicas = extraer(datos, biblioteca)
 
+            # ==========================
+            # NUEVO BLOQUE
+            # ==========================
+
+            sector = obtener_sector(ticker)
+
+            caracteristicas["sector"] = sector
+            caracteristicas["sector_score"] = score_sector(sector)
+
+            # ==========================
+
             resultado = calcular_score(caracteristicas)
 
             ranking.append({
 
                 "ticker": ticker,
+
+                "sector": sector,
 
                 "score": resultado["score"],
 
