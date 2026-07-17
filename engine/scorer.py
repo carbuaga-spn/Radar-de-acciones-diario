@@ -3,51 +3,66 @@ def calcular_score(c):
     score = 0
     motivos = []
 
-    # ==========================
-    # TENDENCIA
-    # ==========================
+    # =====================================
+    # TÉCNICO
+    # =====================================
+
+    tecnico = 0
 
     if c["above_ema20"]:
-        score += 20
-        motivos.append("Sobre EMA20 (+20)")
+        tecnico += 20
 
     if c["above_ema9"]:
-        score += 15
-        motivos.append("Sobre EMA9 (+15)")
-
-    # ==========================
-    # VELA
-    # ==========================
+        tecnico += 15
 
     if c["green_day"]:
-        score += 10
-        motivos.append("Vela verde (+10)")
+        tecnico += 10
 
     if c["body_percent"] > 0.60:
-        score += 15
-        motivos.append("Cuerpo fuerte (+15)")
-
-    # ==========================
-    # VOLUMEN
-    # ==========================
+        tecnico += 15
 
     if c["relative_volume"] > 1.5:
-        score += 20
-        motivos.append("Volumen muy alto (+20)")
+        tecnico += 20
 
     elif c["relative_volume"] > 1.2:
-        score += 10
-        motivos.append("Volumen alto (+10)")
+        tecnico += 10
 
-    # ==========================
+    score += tecnico
+
+    motivos.append(f"Técnico: {tecnico}")
+
+    # =====================================
     # SECTOR
-    # ==========================
+    # =====================================
 
-    if c["sector_score"] > 0:
-        score += c["sector_score"]
-        motivos.append(f"Sector fuerte (+{c['sector_score']})")
+    sector = c.get("sector_score", 0)
+
+    score += sector
+
+    if sector > 0:
+        motivos.append(f"Sector: {sector}")
+
+    # =====================================
+    # FLUJO INSTITUCIONAL
+    # =====================================
+
+    flujo = c.get("institutional_flow", 0)
+
+    flujo_aplicado = round(flujo * 0.40)
+
+    score += flujo_aplicado
+
+    if flujo_aplicado > 0:
+        motivos.append(f"Flujo: {flujo_aplicado}")
+
+    # =====================================
+    # TOTAL
+    # =====================================
 
     return {
-        "score": score,
+
+        "score": round(score),
+
         "motivos": motivos
+
     }
