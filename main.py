@@ -16,10 +16,7 @@ from config.radars import cargar_radar
 
 def main():
 
-    ranking = []
-
     radar = cargar_radar("close")
-
     tickers = cargar_universo()
 
     print()
@@ -28,6 +25,13 @@ def main():
     print("Radar Cierre")
     print("===================================")
     print()
+
+    # =====================================
+    # FASE 1
+    # Extraer información de todas las acciones
+    # =====================================
+
+    acciones = []
 
     for ticker in tickers:
 
@@ -41,36 +45,53 @@ def main():
 
             caracteristicas = extraer(datos, biblioteca)
 
-            # ==========================
-            # NUEVO BLOQUE
-            # ==========================
-
             sector = obtener_sector(ticker)
 
             caracteristicas["sector"] = sector
-            caracteristicas["sector_score"] = score_sector(sector)
 
-            # ==========================
-
-            resultado = calcular_score(caracteristicas)
-
-            ranking.append({
+            acciones.append({
 
                 "ticker": ticker,
 
                 "sector": sector,
 
-                "score": resultado["score"],
-
-                "motivos": resultado["motivos"]
+                "caracteristicas": caracteristicas
 
             })
 
         except Exception as e:
 
             print("ERROR", ticker)
-
             print(e)
+
+    # =====================================
+    # FASE 2
+    # Calcular scores
+    # =====================================
+
+    ranking = []
+
+    for accion in acciones:
+
+        caracteristicas = accion["caracteristicas"]
+
+        caracteristicas["sector_score"] = score_sector(
+            accion["sector"]
+        )
+
+        resultado = calcular_score(caracteristicas)
+
+        ranking.append({
+
+            "ticker": accion["ticker"],
+
+            "sector": accion["sector"],
+
+            "score": resultado["score"],
+
+            "motivos": resultado["motivos"]
+
+        })
 
     ranking = seleccionar_mejores(
 
