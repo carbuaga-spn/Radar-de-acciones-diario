@@ -52,7 +52,9 @@ def main():
             acciones.append({
 
                 "ticker": ticker,
+
                 "sector": sector,
+
                 "caracteristicas": caracteristicas
 
             })
@@ -64,14 +66,14 @@ def main():
 
     # =====================================
     # FASE 2
-    # Calcular la fuerza de los sectores
+    # Calcular fortaleza de sectores
     # =====================================
 
     scores_sector = calcular_scores_sector(acciones)
 
     # =====================================
     # FASE 3
-    # Calcular el ranking final
+    # Calcular ranking final
     # =====================================
 
     ranking = []
@@ -80,18 +82,26 @@ def main():
 
         caracteristicas = accion["caracteristicas"]
 
-        caracteristicas["sector_score"] = scores_sector.get(
+        info_sector = scores_sector.get(
+
             accion["sector"],
-            0
+
+            {"score": 0}
+
         )
+
+        caracteristicas["sector_score"] = info_sector["score"]
 
         resultado = calcular_score(caracteristicas)
 
         ranking.append({
 
             "ticker": accion["ticker"],
+
             "sector": accion["sector"],
+
             "score": resultado["score"],
+
             "motivos": resultado["motivos"]
 
         })
