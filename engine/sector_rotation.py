@@ -1,7 +1,8 @@
 """
 AEGIS - Sector Rotation Engine
-Versión 2
+Versión 3
 """
+
 
 SECTORES = {
 
@@ -48,40 +49,67 @@ def calcular_scores_sector(acciones):
 
     sectores = {}
 
-    # Agrupar acciones por sector
     for accion in acciones:
 
         sector = accion["sector"]
 
-        sectores.setdefault(sector, []).append(accion)
+        sectores.setdefault(sector, []).append(
+            accion["caracteristicas"]
+        )
 
-    scores = {}
+    resultado = {}
 
     for sector, lista in sectores.items():
 
-        total = 0
+        total = len(lista)
 
-        for accion in lista:
+        sobre_ema20 = 0
+        sobre_ema9 = 0
+        verdes = 0
+        volumen = 0
+        cuerpos = 0
 
-            c = accion["caracteristicas"]
+        for c in lista:
 
             if c["above_ema20"]:
-                total += 2
+                sobre_ema20 += 1
 
             if c["above_ema9"]:
-                total += 1
+                sobre_ema9 += 1
 
             if c["green_day"]:
-                total += 1
+                verdes += 1
 
             if c["relative_volume"] > 1.2:
-                total += 2
+                volumen += 1
 
             if c["body_percent"] > 0.60:
-                total += 1
+                cuerpos += 1
 
-        promedio = total / len(lista)
+        score = (
+            sobre_ema20 * 2 +
+            sobre_ema9 +
+            verdes +
+            volumen * 2 +
+            cuerpos
+        ) / total
 
-        scores[sector] = round(promedio)
+        resultado[sector] = {
 
-    return scores
+            "score": round(score),
+
+            "acciones": total,
+
+            "sobre_ema20": sobre_ema20,
+
+            "sobre_ema9": sobre_ema9,
+
+            "verdes": verdes,
+
+            "volumen": volumen,
+
+            "cuerpos": cuerpos
+
+        }
+
+    return resultado
