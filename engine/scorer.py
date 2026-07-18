@@ -1,67 +1,48 @@
-def calcular_score(c):
+from engine.score_dimensions import (
+    score_market,
+    score_sector,
+    score_sector_synchronization,
+    score_institutional_flow,
+    score_sector_leader,
+    score_closing_quality,
+    score_momentum_retention,
+)
 
-    score = 0
+
+def calcular_score(features):
+
+    score_total = 0
     motivos = []
 
-    # =====================================
-    # TÉCNICO
-    # =====================================
+    dimensiones = [
 
-    tecnico = 0
+        score_market,
 
-    if c["above_ema20"]:
-        tecnico += 20
+        score_sector,
 
-    if c["above_ema9"]:
-        tecnico += 15
+        score_sector_synchronization,
 
-    if c["green_day"]:
-        tecnico += 10
+        score_institutional_flow,
 
-    if c["body_percent"] > 0.60:
-        tecnico += 15
+        score_sector_leader,
 
-    if c["relative_volume"] > 1.5:
-        tecnico += 20
+        score_closing_quality,
 
-    elif c["relative_volume"] > 1.2:
-        tecnico += 10
+        score_momentum_retention,
 
-    score += tecnico
+    ]
 
-    motivos.append(f"Técnico: {tecnico}")
+    for dimension in dimensiones:
 
-    # =====================================
-    # SECTOR
-    # =====================================
+        puntos, razones = dimension(features)
 
-    sector = c.get("sector_score", 0)
+        score_total += puntos
 
-    score += sector
-
-    if sector > 0:
-        motivos.append(f"Sector: {sector}")
-
-    # =====================================
-    # FLUJO INSTITUCIONAL
-    # =====================================
-
-    flujo = c.get("institutional_flow", 0)
-
-    flujo_aplicado = round(flujo * 0.40)
-
-    score += flujo_aplicado
-
-    if flujo_aplicado > 0:
-        motivos.append(f"Flujo: {flujo_aplicado}")
-
-    # =====================================
-    # TOTAL
-    # =====================================
+        motivos.extend(razones)
 
     return {
 
-        "score": round(score),
+        "score": round(score_total),
 
         "motivos": motivos
 
