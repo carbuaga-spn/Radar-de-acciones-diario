@@ -25,3 +25,19 @@ def volumen_medio(datos, sesiones=20):
     ]
 
     return sum(volumenes) / len(volumenes)
+
+
+def maximo(datos, sesiones=20):
+
+    return max(
+        float(d["high"])
+        for d in datos[:sesiones]
+    )
+
+
+def minimo(datos, sesiones=20):
+
+    return min(
+        float(d["low"])
+        for d in datos[:sesiones]
+    )
