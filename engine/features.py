@@ -1,15 +1,15 @@
-def extraer(datos, biblioteca):
+def extraer(datos, biblioteca, indice=0):
 
-    ultimo = datos[0]
+    vela = datos[indice]
 
-    cierre = float(ultimo["close"])
-    apertura = float(ultimo["open"])
-    maximo = float(ultimo["high"])
-    minimo = float(ultimo["low"])
-    volumen = float(ultimo["volume"])
+    cierre = float(vela["close"])
+    apertura = float(vela["open"])
+    maximo = float(vela["high"])
+    minimo = float(vela["low"])
+    volumen = float(vela["volume"])
 
-    ema9 = biblioteca["ema9"][0]
-    ema20 = biblioteca["ema20"][0]
+    ema9 = biblioteca["ema9"][indice]
+    ema20 = biblioteca["ema20"][indice]
 
     rango = maximo - minimo
 
