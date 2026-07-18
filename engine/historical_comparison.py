@@ -3,6 +3,9 @@ from engine.historical_library import construir
 from engine.pattern_distance import calcular
 
 
+DISTANCIA_MAXIMA = 2.5
+
+
 def comparar(caracteristicas, datos):
 
     confidence = 0
@@ -24,6 +27,9 @@ def comparar(caracteristicas, datos):
             caracteristicas,
             patron
         )
+
+        if distancia > DISTANCIA_MAXIMA:
+            continue
 
         entrada = float(datos[i]["close"])
 
@@ -57,6 +63,13 @@ def comparar(caracteristicas, datos):
         key=lambda x: x["distancia"]
     )
 
-    mejores = coincidencias[:10]
+    mejores = coincidencias
 
-   
+    if mejores:
+
+        positivos = sum(
+            1 for c in mejores
+            if c["retorno_5d"] > 0
+        )
+
+       
