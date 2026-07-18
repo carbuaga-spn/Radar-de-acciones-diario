@@ -35,6 +35,16 @@ def extraer(datos, biblioteca, indice=0):
         min(cierre, apertura) - minimo
     )
 
+    upper_wick_percent = (
+        upper_wick / rango
+        if rango > 0 else 0
+    )
+
+    lower_wick_percent = (
+        lower_wick / rango
+        if rango > 0 else 0
+    )
+
     close_position = (
         (cierre - minimo) / rango
         if rango > 0 else 0
@@ -82,6 +92,10 @@ def extraer(datos, biblioteca, indice=0):
         "upper_wick": upper_wick,
 
         "lower_wick": lower_wick,
+
+        "upper_wick_percent": upper_wick_percent,
+
+        "lower_wick_percent": lower_wick_percent,
 
         "close_position": close_position,
 
