@@ -16,18 +16,6 @@ def calcular_score(c):
         motivos.append("Sobre EMA9 (+15)")
 
     # ==========================================
-    # VELA
-    # ==========================================
-
-    if c["green_day"]:
-        score += 10
-        motivos.append("Vela verde (+10)")
-
-    if c["body_percent"] > 0.60:
-        score += 15
-        motivos.append("Cuerpo fuerte (+15)")
-
-    # ==========================================
     # VOLUMEN
     # ==========================================
 
@@ -40,16 +28,20 @@ def calcular_score(c):
         motivos.append("Volumen alto (+10)")
 
     # ==========================================
-    # POSICIÓN EN EL RANGO DE 20 SESIONES
+    # CALIDAD DEL CIERRE
     # ==========================================
 
-    if c["range_position_20"] >= 0.90:
-        score += 15
-        motivos.append("Cierre cerca del máximo de 20 sesiones (+15)")
+    if c["closing_quality"] >= 80:
+        score += 25
+        motivos.append("Cierre de alta calidad (+25)")
 
-    elif c["range_position_20"] >= 0.75:
+    elif c["closing_quality"] >= 60:
+        score += 15
+        motivos.append("Buen cierre (+15)")
+
+    elif c["closing_quality"] >= 40:
         score += 8
-        motivos.append("Cierre en la parte alta del rango de 20 sesiones (+8)")
+        motivos.append("Cierre aceptable (+8)")
 
     return {
         "score": score,
