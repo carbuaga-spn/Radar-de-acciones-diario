@@ -73,7 +73,25 @@ def calcular_score(c, historico):
         score += 5
         motivos.append("Patrones suficientes (+5)")
 
-    score = min(score, 100)
+    # ==========================================
+    # RIESGO HISTÓRICO
+    # ==========================================
+
+    drawdown = historico["max_drawdown"]
+
+    if drawdown >= -3:
+        score += 10
+        motivos.append("Drawdown histórico muy bajo (+10)")
+
+    elif drawdown >= -5:
+        score += 5
+        motivos.append("Drawdown histórico bajo (+5)")
+
+    elif drawdown <= -15:
+        score -= 10
+        motivos.append("Drawdown histórico elevado (-10)")
+
+    score = max(0, min(score, 100))
 
     return {
         "score": score,
