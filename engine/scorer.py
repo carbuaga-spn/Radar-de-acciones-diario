@@ -1,49 +1,58 @@
-from engine.score_dimensions import (
-    score_market,
-    score_sector,
-    score_sector_synchronization,
-    score_institutional_flow,
-    score_sector_leader,
-    score_closing_quality,
-    score_momentum_retention,
-)
+def calcular_score(c, historico):
 
-
-def calcular_score(features):
-
-    score_total = 0
+    score = 0
     motivos = []
 
-    dimensiones = [
+    # ==========================================
+    # TENDENCIA
+    # ==========================================
 
-        score_market,
+    if c["above_ema20"]:
+        score += 20
+        motivos.append("Sobre EMA20 (+20)")
 
-        score_sector,
+    if c["above_ema9"]:
+        score += 15
+        motivos.append("Sobre EMA9 (+15)")
 
-        score_sector_synchronization,
+    # ==========================================
+    # VOLUMEN
+    # ==========================================
 
-        score_institutional_flow,
+    if c["relative_volume"] > 1.5:
+        score += 20
+        motivos.append("Volumen muy alto (+20)")
 
-        score_sector_leader,
+    elif c["relative_volume"] > 1.2:
+        score += 10
+        motivos.append("Volumen alto (+10)")
 
-        score_closing_quality,
+    # ==========================================
+    # CALIDAD DEL CIERRE
+    # ==========================================
 
-        score_momentum_retention,
+    if c["closing_quality"] >= 80:
+        score += 25
+        motivos.append("Cierre de alta calidad (+25)")
 
-    ]
+    elif c["closing_quality"] >= 60:
+        score += 15
+        motivos.append("Buen cierre (+15)")
 
-    for dimension in dimensiones:
+    elif c["closing_quality"] >= 40:
+        score += 8
+        motivos.append("Cierre aceptable (+8)")
 
-        puntos, razones = dimension(features)
+    # ==========================================
+    # HISTÓRICO
+    # (Preparado para futuras versiones)
+    # ==========================================
 
-        score_total += puntos
-
-        motivos.extend(razones)
+    # Próximamente:
+    # score += ...
+    # motivos.append(...)
 
     return {
-
-        "score": round(score_total),
-
+        "score": score,
         "motivos": motivos
-
     }
