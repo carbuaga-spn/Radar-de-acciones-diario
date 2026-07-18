@@ -44,13 +44,22 @@ def calcular_score(c, historico):
         motivos.append("Cierre aceptable (+8)")
 
     # ==========================================
-    # HISTÓRICO
-    # (Preparado para futuras versiones)
+    # CONFIANZA HISTÓRICA
     # ==========================================
 
-    # Próximamente:
-    # score += ...
-    # motivos.append(...)
+    confianza = historico["confidence"]
+
+    if confianza >= 80:
+        score += 20
+        motivos.append("Alta confianza histórica (+20)")
+
+    elif confianza >= 60:
+        score += 10
+        motivos.append("Buena confianza histórica (+10)")
+
+    elif confianza >= 40:
+        score += 5
+        motivos.append("Confianza histórica moderada (+5)")
 
     return {
         "score": score,
