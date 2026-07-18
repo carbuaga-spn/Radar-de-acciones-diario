@@ -1,18 +1,46 @@
+from engine.features import extraer
+from engine.historical_library import construir
+from engine.pattern_distance import calcular
+
+
 def comparar(caracteristicas, datos):
 
     confidence = 0
     matches = 0
 
     # =====================================================
-    # PREPARADO PARA COMPARACIÓN HISTÓRICA
+    # COMPARACIÓN HISTÓRICA
     # =====================================================
+
+    coincidencias = []
 
     for i in range(20, len(datos) - 10):
 
-        # Aquí construiremos en próximas versiones
-        # el patrón histórico de la sesión i
+        datos_historicos = datos[i:]
 
-        pass
+        biblioteca = construir(datos_historicos)
+
+        patron = extraer(
+            datos_historicos,
+            biblioteca
+        )
+
+        distancia = calcular(
+            caracteristicas,
+            patron
+        )
+
+        coincidencias.append({
+
+            "indice": i,
+
+            "distancia": distancia
+
+        })
+
+    coincidencias.sort(
+        key=lambda x: x["distancia"]
+    )
 
     # =====================================================
     # EVALUACIÓN TEMPORAL
@@ -30,14 +58,6 @@ def comparar(caracteristicas, datos):
         confidence += 20
         matches += 1
 
-    if caracteristicas["closing_quality"] >= 80:
-        confidence += 25
-        matches += 1
-
-    if caracteristicas["range_position_20"] >= 0.80:
-        confidence += 20
-        matches += 1
-
     confidence = min(confidence, 100)
 
     return {
@@ -52,6 +72,8 @@ def comparar(caracteristicas, datos):
 
         "max_drawdown": 0.0,
 
-        "confidence": confidence
+        "confidence": confidence,
+
+        "coincidencias": coincidencias[:10]
 
     }
