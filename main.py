@@ -39,7 +39,7 @@ def main():
 
             historico = comparar(caracteristicas)
 
-            resultado = calcular_score(caracteristicas)
+            resultado = calcular_score(caracteristicas, historico)
 
             ranking.append({
 
