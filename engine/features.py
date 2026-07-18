@@ -11,6 +11,11 @@ def extraer(datos, biblioteca):
     ema9 = biblioteca["ema9"][0]
     ema20 = biblioteca["ema20"][0]
 
+    volumen20 = biblioteca["volumen20"]
+
+    high20 = biblioteca["high20"]
+    low20 = biblioteca["low20"]
+
     rango = maximo - minimo
 
     body = abs(cierre - apertura)
@@ -19,8 +24,6 @@ def extraer(datos, biblioteca):
         body / rango
         if rango > 0 else 0
     )
-
-    volumen20 = biblioteca["volumen20"]
 
     relative_volume = (
         volumen / volumen20
@@ -38,6 +41,13 @@ def extraer(datos, biblioteca):
     close_position = (
         (cierre - minimo) / rango
         if rango > 0 else 0
+    )
+
+    range20 = high20 - low20
+
+    range_position_20 = (
+        (cierre - low20) / range20
+        if range20 > 0 else 0
     )
 
     return {
@@ -59,6 +69,14 @@ def extraer(datos, biblioteca):
         "ema9": ema9,
         "ema20": ema20,
         "volumen20": volumen20,
+
+        # ==========================
+        # RANGO 20 SESIONES
+        # ==========================
+
+        "high20": high20,
+        "low20": low20,
+        "range_position_20": range_position_20,
 
         # ==========================
         # TENDENCIA
