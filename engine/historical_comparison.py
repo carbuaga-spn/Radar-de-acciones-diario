@@ -1,29 +1,40 @@
-def comparar(c):
+def comparar(caracteristicas, datos):
 
     confidence = 0
     matches = 0
 
-    # ==========================================
-    # CALIDAD DEL PATRÓN ACTUAL
-    # ==========================================
+    # =====================================================
+    # PREPARADO PARA COMPARACIÓN HISTÓRICA
+    # =====================================================
 
-    if c["above_ema20"]:
+    for i in range(20, len(datos) - 10):
+
+        # Aquí construiremos en próximas versiones
+        # el patrón histórico de la sesión i
+
+        pass
+
+    # =====================================================
+    # EVALUACIÓN TEMPORAL
+    # =====================================================
+
+    if caracteristicas["above_ema20"]:
         confidence += 20
         matches += 1
 
-    if c["above_ema9"]:
+    if caracteristicas["above_ema9"]:
         confidence += 15
         matches += 1
 
-    if c["relative_volume"] > 1.2:
+    if caracteristicas["relative_volume"] > 1.2:
         confidence += 20
         matches += 1
 
-    if c["closing_quality"] >= 80:
+    if caracteristicas["closing_quality"] >= 80:
         confidence += 25
         matches += 1
 
-    if c["range_position_20"] >= 0.80:
+    if caracteristicas["range_position_20"] >= 0.80:
         confidence += 20
         matches += 1
 
