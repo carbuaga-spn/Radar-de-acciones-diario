@@ -9,6 +9,12 @@ def comparar(caracteristicas, datos):
     matches = 0
 
     # =====================================================
+    # CONSTRUIR LA BIBLIOTECA UNA SOLA VEZ
+    # =====================================================
+
+    biblioteca = construir(datos)
+
+    # =====================================================
     # COMPARACIÓN HISTÓRICA
     # =====================================================
 
@@ -16,13 +22,10 @@ def comparar(caracteristicas, datos):
 
     for i in range(20, len(datos) - 10):
 
-        datos_historicos = datos[i:]
-
-        biblioteca = construir(datos_historicos)
-
         patron = extraer(
-            datos_historicos,
-            biblioteca
+            datos,
+            biblioteca,
+            i
         )
 
         distancia = calcular(
