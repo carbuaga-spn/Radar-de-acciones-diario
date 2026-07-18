@@ -8,15 +8,7 @@ def comparar(caracteristicas, datos):
     confidence = 0
     matches = 0
 
-    # =====================================================
-    # CONSTRUIR LA BIBLIOTECA UNA SOLA VEZ
-    # =====================================================
-
     biblioteca = construir(datos)
-
-    # =====================================================
-    # COMPARACIÓN HISTÓRICA
-    # =====================================================
 
     coincidencias = []
 
@@ -33,11 +25,31 @@ def comparar(caracteristicas, datos):
             patron
         )
 
+        entrada = float(datos[i]["close"])
+
+        salida_5d = float(datos[i - 5]["close"])
+
+        salida_10d = float(datos[i - 10]["close"])
+
+        retorno_5d = (
+            (salida_5d - entrada) / entrada
+        ) * 100
+
+        retorno_10d = (
+            (salida_10d - entrada) / entrada
+        ) * 100
+
         coincidencias.append({
 
             "indice": i,
 
-            "distancia": distancia
+            "distancia": distancia,
+
+            "entrada": entrada,
+
+            "retorno_5d": retorno_5d,
+
+            "retorno_10d": retorno_10d
 
         })
 
@@ -45,38 +57,6 @@ def comparar(caracteristicas, datos):
         key=lambda x: x["distancia"]
     )
 
-    # =====================================================
-    # EVALUACIÓN TEMPORAL
-    # =====================================================
+    mejores = coincidencias[:10]
 
-    if caracteristicas["above_ema20"]:
-        confidence += 20
-        matches += 1
-
-    if caracteristicas["above_ema9"]:
-        confidence += 15
-        matches += 1
-
-    if caracteristicas["relative_volume"] > 1.2:
-        confidence += 20
-        matches += 1
-
-    confidence = min(confidence, 100)
-
-    return {
-
-        "matches": matches,
-
-        "win_rate": 0.0,
-
-        "avg_return_5d": 0.0,
-
-        "avg_return_10d": 0.0,
-
-        "max_drawdown": 0.0,
-
-        "confidence": confidence,
-
-        "coincidencias": coincidencias[:10]
-
-    }
+   
