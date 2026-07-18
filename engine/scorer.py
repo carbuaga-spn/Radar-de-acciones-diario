@@ -28,38 +28,52 @@ def calcular_score(c, historico):
         motivos.append("Volumen alto (+10)")
 
     # ==========================================
-    # CALIDAD DEL CIERRE
+    # CALIDAD DEL PATRÓN
     # ==========================================
 
-    if c["closing_quality"] >= 80:
-        score += 25
-        motivos.append("Cierre de alta calidad (+25)")
-
-    elif c["closing_quality"] >= 60:
+    if c["close_position"] >= 0.80:
         score += 15
-        motivos.append("Buen cierre (+15)")
+        motivos.append("Cierre cerca del máximo (+15)")
 
-    elif c["closing_quality"] >= 40:
+    elif c["close_position"] >= 0.60:
         score += 8
-        motivos.append("Cierre aceptable (+8)")
+        motivos.append("Buen cierre (+8)")
 
-    # ==========================================
-    # CONFIANZA HISTÓRICA
-    # ==========================================
-
-    confianza = historico["confidence"]
-
-    if confianza >= 80:
-        score += 20
-        motivos.append("Alta confianza histórica (+20)")
-
-    elif confianza >= 60:
+    if c["body_percent"] >= 0.60:
         score += 10
-        motivos.append("Buena confianza histórica (+10)")
+        motivos.append("Cuerpo sólido (+10)")
 
-    elif confianza >= 40:
+    # ==========================================
+    # RESULTADO HISTÓRICO
+    # ==========================================
+
+    if historico["win_rate"] >= 70:
+        score += 20
+        motivos.append("Win rate histórico alto (+20)")
+
+    elif historico["win_rate"] >= 60:
+        score += 10
+        motivos.append("Win rate histórico positivo (+10)")
+
+    if historico["avg_return_5d"] > 3:
+        score += 15
+        motivos.append("Rentabilidad media 5d elevada (+15)")
+
+    elif historico["avg_return_5d"] > 1:
+        score += 8
+        motivos.append("Rentabilidad media 5d positiva (+8)")
+
+    numero_coincidencias = len(historico["coincidencias"])
+
+    if numero_coincidencias >= 30:
+        score += 10
+        motivos.append("Muchos patrones similares (+10)")
+
+    elif numero_coincidencias >= 10:
         score += 5
-        motivos.append("Confianza histórica moderada (+5)")
+        motivos.append("Patrones suficientes (+5)")
+
+    score = min(score, 100)
 
     return {
         "score": score,
