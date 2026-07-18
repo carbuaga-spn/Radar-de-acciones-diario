@@ -45,6 +45,26 @@ def comparar(caracteristicas, datos):
             (salida_10d - entrada) / entrada
         ) * 100
 
+        # ==========================================
+        # DRAWDOWN MÁXIMO EN LOS 10 DÍAS SIGUIENTES
+        # ==========================================
+
+        minimo = entrada
+
+        for j in range(i - 10, i + 1):
+
+            if j < 0:
+                continue
+
+            minimo = min(
+                minimo,
+                float(datos[j]["low"])
+            )
+
+        max_drawdown = (
+            (minimo - entrada) / entrada
+        ) * 100
+
         coincidencias.append({
 
             "indice": i,
@@ -55,7 +75,9 @@ def comparar(caracteristicas, datos):
 
             "retorno_5d": retorno_5d,
 
-            "retorno_10d": retorno_10d
+            "retorno_10d": retorno_10d,
+
+            "drawdown": max_drawdown
 
         })
 
@@ -72,4 +94,55 @@ def comparar(caracteristicas, datos):
             if c["retorno_5d"] > 0
         )
 
-       
+        win_rate = positivos / len(mejores) * 100
+
+        avg_return_5d = sum(
+            c["retorno_5d"] for c in mejores
+        ) / len(mejores)
+
+        avg_return_10d = sum(
+            c["retorno_10d"] for c in mejores
+        ) / len(mejores)
+
+        max_drawdown = min(
+            c["drawdown"] for c in mejores
+        )
+
+    else:
+
+        win_rate = 0.0
+        avg_return_5d = 0.0
+        avg_return_10d = 0.0
+        max_drawdown = 0.0
+
+    if caracteristicas["above_ema20"]:
+        confidence += 20
+        matches += 1
+
+    if caracteristicas["above_ema9"]:
+        confidence += 15
+        matches += 1
+
+    if caracteristicas["relative_volume"] > 1.2:
+        confidence += 20
+        matches += 1
+
+    confidence = min(confidence, 100)
+
+    return {
+
+        "matches": matches,
+
+        "win_rate": win_rate,
+
+        "avg_return_5d": avg_return_5d,
+
+        "avg_return_10d": avg_return_10d,
+
+        "max_drawdown": max_drawdown,
+
+        "confidence": confidence,
+
+        "coincidencias": mejores
+
+    }
