@@ -50,6 +50,58 @@ def extraer(datos, biblioteca, indice=0):
         if rango > 0 else 0
     )
 
+    # ==========================================
+    # CONTEXTO DEL MERCADO
+    # ==========================================
+
+    close_1d_change = 0
+    close_3d_change = 0
+    close_5d_change = 0
+
+    ema9_slope = 0
+    ema20_slope = 0
+
+    higher_high = False
+    higher_low = False
+
+    if indice + 1 < len(datos):
+
+        cierre_1 = float(datos[indice + 1]["close"])
+
+        close_1d_change = (
+            (cierre - cierre_1) / cierre_1
+        ) * 100
+
+        higher_high = (
+            maximo >
+            float(datos[indice + 1]["high"])
+        )
+
+        higher_low = (
+            minimo >
+            float(datos[indice + 1]["low"])
+        )
+
+        ema9_slope = ema9 - biblioteca["ema9"][indice + 1]
+
+        ema20_slope = ema20 - biblioteca["ema20"][indice + 1]
+
+    if indice + 3 < len(datos):
+
+        cierre_3 = float(datos[indice + 3]["close"])
+
+        close_3d_change = (
+            (cierre - cierre_3) / cierre_3
+        ) * 100
+
+    if indice + 5 < len(datos):
+
+        cierre_5 = float(datos[indice + 5]["close"])
+
+        close_5d_change = (
+            (cierre - cierre_5) / cierre_5
+        ) * 100
+
     return {
 
         # ==========================
@@ -76,6 +128,20 @@ def extraer(datos, biblioteca, indice=0):
 
         "above_ema9": cierre > ema9,
         "above_ema20": cierre > ema20,
+
+        "ema9_slope": ema9_slope,
+        "ema20_slope": ema20_slope,
+
+        "higher_high": higher_high,
+        "higher_low": higher_low,
+
+        # ==========================
+        # MOMENTUM
+        # ==========================
+
+        "close_1d_change": close_1d_change,
+        "close_3d_change": close_3d_change,
+        "close_5d_change": close_5d_change,
 
         # ==========================
         # VELA
@@ -110,17 +176,11 @@ def extraer(datos, biblioteca, indice=0):
         # ==========================
 
         "sector": None,
-
         "sector_score": 0,
-
         "sector_strength": 0,
-
         "relative_strength": 0,
-
         "institutional_flow": 0,
-
         "last_hour_volume": 0,
-
         "last_hour_strength": 0,
 
         # ==========================
@@ -128,11 +188,8 @@ def extraer(datos, biblioteca, indice=0):
         # ==========================
 
         "market_strength": 0,
-
         "news_score": 0,
-
         "breakout_score": 0,
-
         "momentum_score": 0
 
     }
