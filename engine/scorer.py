@@ -3,6 +3,10 @@ def calcular_score(c):
     score = 0
     motivos = []
 
+    # ==========================================
+    # TENDENCIA
+    # ==========================================
+
     if c["above_ema20"]:
         score += 20
         motivos.append("Sobre EMA20 (+20)")
@@ -10,6 +14,10 @@ def calcular_score(c):
     if c["above_ema9"]:
         score += 15
         motivos.append("Sobre EMA9 (+15)")
+
+    # ==========================================
+    # VELA
+    # ==========================================
 
     if c["green_day"]:
         score += 10
@@ -19,13 +27,15 @@ def calcular_score(c):
         score += 15
         motivos.append("Cuerpo fuerte (+15)")
 
-    volumen_relativo = c["volume"] / c["volumen20"]
+    # ==========================================
+    # VOLUMEN
+    # ==========================================
 
-    if volumen_relativo > 1.5:
+    if c["relative_volume"] > 1.5:
         score += 20
         motivos.append("Volumen muy alto (+20)")
 
-    elif volumen_relativo > 1.2:
+    elif c["relative_volume"] > 1.2:
         score += 10
         motivos.append("Volumen alto (+10)")
 
