@@ -50,6 +50,24 @@ def extraer(datos, biblioteca):
         if range20 > 0 else 0
     )
 
+    # =====================================================
+    # CALIDAD DEL CIERRE (0-100)
+    # =====================================================
+
+    closing_quality = 0
+
+    if close_position >= 0.80:
+        closing_quality += 30
+
+    if body_percent >= 0.60:
+        closing_quality += 25
+
+    if body > 0 and upper_wick <= body * 0.30:
+        closing_quality += 25
+
+    if range_position_20 >= 0.80:
+        closing_quality += 20
+
     return {
 
         # ==========================
@@ -90,17 +108,11 @@ def extraer(datos, biblioteca):
         # ==========================
 
         "green_day": cierre > apertura,
-
         "range": rango,
-
         "body": body,
-
         "body_percent": body_percent,
-
         "upper_wick": upper_wick,
-
         "lower_wick": lower_wick,
-
         "close_position": close_position,
 
         # ==========================
@@ -143,7 +155,7 @@ def extraer(datos, biblioteca):
         # CIERRE (Closing Radar)
         # =====================================================
 
-        "closing_quality": 0,
+        "closing_quality": closing_quality,
         "momentum_retention": 0,
 
         # =====================================================
