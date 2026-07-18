@@ -7,12 +7,14 @@ def construir(datos):
 
     ema20 = ema(datos, 20)
 
+    volumen20 = volumen_medio(datos)
+
     return {
 
         "ema9": ema9,
 
         "ema20": ema20,
 
-        "volumen20": volumen_medio(datos)
+        "volumen20": volumen20
 
     }
