@@ -22,7 +22,7 @@ def calcular(actual, historico):
     )
 
     # ==========================================
-    # CUERPO DE LA VELA
+    # CUERPO
     # ==========================================
 
     distancia += abs(
@@ -47,17 +47,17 @@ def calcular(actual, historico):
         distancia += 0.5
 
     # ==========================================
-    # MECHAS
+    # MECHAS NORMALIZADAS
     # ==========================================
 
     distancia += abs(
-        actual["upper_wick"] -
-        historico["upper_wick"]
+        actual["upper_wick_percent"] -
+        historico["upper_wick_percent"]
     )
 
     distancia += abs(
-        actual["lower_wick"] -
-        historico["lower_wick"]
+        actual["lower_wick_percent"] -
+        historico["lower_wick_percent"]
     )
 
     return distancia
