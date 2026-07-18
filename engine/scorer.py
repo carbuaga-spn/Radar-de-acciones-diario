@@ -39,6 +39,18 @@ def calcular_score(c):
         score += 10
         motivos.append("Volumen alto (+10)")
 
+    # ==========================================
+    # POSICIÓN EN EL RANGO DE 20 SESIONES
+    # ==========================================
+
+    if c["range_position_20"] >= 0.90:
+        score += 15
+        motivos.append("Cierre cerca del máximo de 20 sesiones (+15)")
+
+    elif c["range_position_20"] >= 0.75:
+        score += 8
+        motivos.append("Cierre en la parte alta del rango de 20 sesiones (+8)")
+
     return {
         "score": score,
         "motivos": motivos
