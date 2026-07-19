@@ -1,15 +1,13 @@
 from engine.features import extraer
 from engine.historical_library import construir
 from engine.pattern_distance import calcular
+from engine.pattern_statistics import calcular as calcular_estadisticas
 
 
-DISTANCIA_MAXIMA = 2.5
+MAX_COINCIDENCIAS = 30
 
 
 def comparar(caracteristicas, datos):
-
-    confidence = 0
-    matches = 0
 
     biblioteca = construir(datos)
 
@@ -28,9 +26,6 @@ def comparar(caracteristicas, datos):
             patron
         )
 
-        if distancia > DISTANCIA_MAXIMA:
-            continue
-
         entrada = float(datos[i]["close"])
 
         salida_5d = float(datos[i - 5]["close"])
@@ -45,10 +40,6 @@ def comparar(caracteristicas, datos):
             (salida_10d - entrada) / entrada
         ) * 100
 
-        # ==========================================
-        # DRAWDOWN MÁXIMO EN LOS 10 DÍAS SIGUIENTES
-        # ==========================================
-
         minimo = entrada
 
         for j in range(i - 10, i + 1):
@@ -61,7 +52,7 @@ def comparar(caracteristicas, datos):
                 float(datos[j]["low"])
             )
 
-        max_drawdown = (
+        drawdown = (
             (minimo - entrada) / entrada
         ) * 100
 
@@ -77,7 +68,7 @@ def comparar(caracteristicas, datos):
 
             "retorno_10d": retorno_10d,
 
-            "drawdown": max_drawdown
+            "drawdown": drawdown
 
         })
 
@@ -85,63 +76,15 @@ def comparar(caracteristicas, datos):
         key=lambda x: x["distancia"]
     )
 
-    mejores = coincidencias
+    mejores = coincidencias[:MAX_COINCIDENCIAS]
 
-    if mejores:
-
-        positivos = sum(
-            1 for c in mejores
-            if c["retorno_5d"] > 0
-        )
-
-        win_rate = positivos / len(mejores) * 100
-
-        avg_return_5d = sum(
-            c["retorno_5d"] for c in mejores
-        ) / len(mejores)
-
-        avg_return_10d = sum(
-            c["retorno_10d"] for c in mejores
-        ) / len(mejores)
-
-        max_drawdown = min(
-            c["drawdown"] for c in mejores
-        )
-
-    else:
-
-        win_rate = 0.0
-        avg_return_5d = 0.0
-        avg_return_10d = 0.0
-        max_drawdown = 0.0
-
-    if caracteristicas["above_ema20"]:
-        confidence += 20
-        matches += 1
-
-    if caracteristicas["above_ema9"]:
-        confidence += 15
-        matches += 1
-
-    if caracteristicas["relative_volume"] > 1.2:
-        confidence += 20
-        matches += 1
-
-    confidence = min(confidence, 100)
+    estadisticas = calcular_estadisticas(
+        mejores
+    )
 
     return {
 
-        "matches": matches,
-
-        "win_rate": win_rate,
-
-        "avg_return_5d": avg_return_5d,
-
-        "avg_return_10d": avg_return_10d,
-
-        "max_drawdown": max_drawdown,
-
-        "confidence": confidence,
+        **estadisticas,
 
         "coincidencias": mejores
 
