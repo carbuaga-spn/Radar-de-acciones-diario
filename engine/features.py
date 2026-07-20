@@ -11,6 +11,8 @@ def extraer(datos, biblioteca, indice=0):
     ema9 = biblioteca["ema9"][indice]
     ema20 = biblioteca["ema20"][indice]
 
+    volumen20 = biblioteca["volumen20"][indice]
+
     rango = maximo - minimo
 
     body = abs(cierre - apertura)
@@ -19,8 +21,6 @@ def extraer(datos, biblioteca, indice=0):
         body / rango
         if rango > 0 else 0
     )
-
-    volumen20 = biblioteca["volumen20"]
 
     relative_volume = (
         volumen / volumen20
@@ -82,9 +82,15 @@ def extraer(datos, biblioteca, indice=0):
             float(datos[indice + 1]["low"])
         )
 
-        ema9_slope = ema9 - biblioteca["ema9"][indice + 1]
+        ema9_slope = (
+            ema9 -
+            biblioteca["ema9"][indice + 1]
+        )
 
-        ema20_slope = ema20 - biblioteca["ema20"][indice + 1]
+        ema20_slope = (
+            ema20 -
+            biblioteca["ema20"][indice + 1]
+        )
 
     if indice + 3 < len(datos):
 
