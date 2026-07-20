@@ -35,11 +35,21 @@ def main():
 
             biblioteca = construir(datos)
 
-            caracteristicas = extraer(datos, biblioteca)
+            caracteristicas = extraer(
+                datos,
+                biblioteca
+            )
 
-            historico = comparar(caracteristicas)
+            historico = comparar(
+                caracteristicas,
+                datos,
+                biblioteca=biblioteca
+            )
 
-            resultado = calcular_score(caracteristicas, historico)
+            resultado = calcular_score(
+                caracteristicas,
+                historico
+            )
 
             ranking.append({
 
@@ -55,9 +65,11 @@ def main():
 
         except Exception as e:
 
-            print("ERROR", ticker)
-
+            print()
+            print("ERROR:", ticker)
+            print(type(e).__name__)
             print(e)
+            print()
 
     ranking = seleccionar_mejores(
 
