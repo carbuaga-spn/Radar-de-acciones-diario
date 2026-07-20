@@ -2,7 +2,10 @@ def ema(datos, periodo):
 
     alpha = 2 / (periodo + 1)
 
-    cierres = [float(d["close"]) for d in reversed(datos)]
+    cierres = [
+        float(d["close"])
+        for d in reversed(datos)
+    ]
 
     ema_actual = cierres[0]
 
@@ -10,7 +13,10 @@ def ema(datos, periodo):
 
     for precio in cierres:
 
-        ema_actual = alpha * precio + (1 - alpha) * ema_actual
+        ema_actual = (
+            alpha * precio +
+            (1 - alpha) * ema_actual
+        )
 
         resultado.append(ema_actual)
 
@@ -21,7 +27,27 @@ def volumen_medio(datos, sesiones=20):
 
     volumenes = [
         float(d["volume"])
-        for d in datos[:sesiones]
+        for d in reversed(datos)
     ]
 
-    return sum(volumenes) / len(volumenes)
+    resultado = []
+
+    suma = 0.0
+
+    ventana = []
+
+    for volumen in volumenes:
+
+        ventana.append(volumen)
+
+        suma += volumen
+
+        if len(ventana) > sesiones:
+
+            suma -= ventana.pop(0)
+
+        resultado.append(
+            suma / len(ventana)
+        )
+
+    return list(reversed(resultado))
