@@ -7,13 +7,21 @@ from engine.pattern_statistics import calcular as calcular_estadisticas
 MAX_COINCIDENCIAS = 30
 
 
-def comparar(caracteristicas, datos):
+def comparar(caracteristicas, datos, indice_actual=None):
 
     biblioteca = construir(datos)
 
     coincidencias = []
 
-    for i in range(20, len(datos) - 10):
+    if indice_actual is None:
+        indice_actual = len(datos)
+
+    limite_superior = min(
+        indice_actual - 10,
+        len(datos) - 10
+    )
+
+    for i in range(20, limite_superior):
 
         patron = extraer(
             datos,
@@ -33,11 +41,13 @@ def comparar(caracteristicas, datos):
         salida_10d = float(datos[i - 10]["close"])
 
         retorno_5d = (
-            (salida_5d - entrada) / entrada
+            (salida_5d - entrada)
+            / entrada
         ) * 100
 
         retorno_10d = (
-            (salida_10d - entrada) / entrada
+            (salida_10d - entrada)
+            / entrada
         ) * 100
 
         minimo = entrada
@@ -53,7 +63,8 @@ def comparar(caracteristicas, datos):
             )
 
         drawdown = (
-            (minimo - entrada) / entrada
+            (minimo - entrada)
+            / entrada
         ) * 100
 
         coincidencias.append({
