@@ -7,9 +7,15 @@ from engine.pattern_statistics import calcular as calcular_estadisticas
 MAX_COINCIDENCIAS = 30
 
 
-def comparar(caracteristicas, datos, indice_actual=None):
+def comparar(
+    caracteristicas,
+    datos,
+    indice_actual=None,
+    biblioteca=None
+):
 
-    biblioteca = construir(datos)
+    if biblioteca is None:
+        biblioteca = construir(datos)
 
     coincidencias = []
 
@@ -53,9 +59,6 @@ def comparar(caracteristicas, datos, indice_actual=None):
         minimo = entrada
 
         for j in range(i - 10, i + 1):
-
-            if j < 0:
-                continue
 
             minimo = min(
                 minimo,
